@@ -1,12 +1,12 @@
 use rand::Rng;
 
-
+#[derive(Debug, Clone)]
 pub struct Person {
     name: String,
     interests: Vec<Interests>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Interests {
     Food,
     Politics,
@@ -16,6 +16,7 @@ enum Interests {
     Television,
 }
 
+#[derive(Debug)]
 enum Topics {
     Food,
     Politics,
@@ -23,17 +24,101 @@ enum Topics {
     Television,
 }
 
-struct Group {
+pub struct Room {
     people: Vec<Person>,
+    //conversations: Vec<Conversation>,
 }
 
-struct Room {
-    groups: Vec<Group>,
+impl Room {
+
+    pub fn new(num: u32) -> Self {
+
+        Self {
+            people: Room::spawn_people(num)
+        }
+
+    }
+
+    pub fn spawn_people(num: u32) -> Vec<Person> {
+        let mut cur = 0;
+        let mut people: Vec<Person> = Vec::new();
+
+        // if num is greater than available names, num = names.max
+        // num must be an even number, unless someone can be talking to themselves?
+        // someone can def be talking to themself
+
+        while cur < num {
+            people.push(Person::new());
+            cur += 1;
+        }
+
+        people
+    }
+
+    pub fn spawn_conversations(&self) -> Vec<Conversation> {
+        let mut iter = self.people.iter();
+        let mut conversations: Vec<Conversation> = Vec::new();
+
+        while let Some(person) = iter.next() {
+
+            if let Some(next_person) = iter.next() {
+                let conversation = Conversation {
+                    people: vec![person.clone(), next_person.clone()],
+                    topic: Topics::Television
+                };
+                conversations.push(conversation);
+            } else {
+                let conversation = Conversation {
+                    people: vec![person.clone()],
+                    topic: Topics::Television
+                };
+                conversations.push(conversation);
+            }
+        }
+
+        conversations
+    }
+
+    pub fn talk(&self) {
+        let mut count: u32 = 0;
+
+        for convo in Room::spawn_conversations(&self) {
+            println!("Conversation {}", count);
+            count +=1;
+
+            for person in convo.people {
+                println!("{}", person.name)
+            }
+
+
+        }
+    }
+
 }
 
-struct Conversation {
+
+pub struct Conversation {
     people: Vec<Person>,
     topic: Topics,
+}
+
+impl Conversation {
+
+    pub fn new() -> Self {
+        Self {
+            people: vec![Person::new(), Person::new()],
+            topic: Topics::Videogames,
+        }
+    }
+
+    pub fn talk(&self) {
+        // try doing this with if let .. instead
+        let mut iter = self.people.iter();
+        let p1 = iter.next().unwrap().name.clone();
+        let p2 = iter.next().unwrap().name.clone();
+        println!("{} and {} are talking about {:?}", p1, p2, self.topic)
+    }
+
 }
 
 impl Person {
