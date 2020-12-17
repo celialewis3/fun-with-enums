@@ -1,7 +1,15 @@
 mod bar;
+mod talk;
+
+use rand::Rng;
 
 fn main() {
-    bar::simulate_bar(2);
+  //bar::simulate_bar(2);
+
+  let person = talk::Person::new();
+  person.greeting();
+
+
 }
 
 /*
