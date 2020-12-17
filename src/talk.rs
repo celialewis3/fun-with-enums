@@ -16,6 +16,17 @@ enum Interests {
     Television,
 }
 
+enum RelationshipLevel {
+    Stranger,
+    Friendly,
+    Besties
+}
+
+struct Relationship {
+    pair: Vec<Person>,
+    level: RelationshipLevel
+}
+
 #[derive(Debug)]
 enum Topics {
     Food,
@@ -38,17 +49,31 @@ impl Topics {
     }
 }
 
+pub struct Simulation {
+    room: Room,
+}
+
+impl Simulation {
+    pub fn step(&self) {
+        // Increase relatonship levels of people in conversation with each other
+        // Have some people leave the room
+    }
+}
+
 pub struct Room {
     people: Vec<Person>,
-    //conversations: Vec<Conversation>,
+    conversations: Vec<Conversation>
 }
 
 impl Room {
 
     pub fn new(num: u32) -> Self {
+        let people = Room::spawn_people(num);
+        let conversations = Room::spawn_conversations(people.clone());
 
         Self {
-            people: Room::spawn_people(num)
+            people,
+            conversations
         }
 
     }
@@ -69,8 +94,8 @@ impl Room {
         people
     }
 
-    pub fn spawn_conversations(&self) -> Vec<Conversation> {
-        let mut iter = self.people.iter();
+    fn spawn_conversations(people: Vec<Person>) -> Vec<Conversation> {
+        let mut iter = people.iter();
         let mut conversations: Vec<Conversation> = Vec::new();
 
         while let Some(person) = iter.next() {
@@ -99,17 +124,16 @@ impl Room {
         println!("There are {} people in the room.", self.people.len());
         println!("");
 
-        for convo in Room::spawn_conversations(&self) {
+        for convo in &self.conversations {
             println!("Conversation {}", count);
             count +=1;
 
-            for person in convo.people {
+            for person in &convo.people {
                 println!("{} who likes {:?}", person.name, person.interests)
             }
 
             println!("The conversation topic is {:?}", convo.topic);
             println!("");
-
 
         }
     }
