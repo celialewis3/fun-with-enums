@@ -42,7 +42,7 @@ impl Person {
 
         Self {
             name: Person::rand_name(),
-            interests: vec![Interests::Food],
+            interests: Person::rand_interest_vec(),
         }
 
     }
@@ -54,23 +54,27 @@ impl Person {
         if n < 1 {
             "Oliver".to_string()
         } else if n < 2 {
-            "Sandra".to_string()
+            "Carolyn".to_string()
         } else {
-            "Jodie".to_string()
+            "Luisa".to_string()
         }
     }
 
-    fn rand_interests() -> String {
+    fn rand_interest() -> Interests {
         let mut rng = rand::thread_rng();
-        let n: u64 = rng.gen_range(0, 3);
 
-        if n < 1 {
-            "Oliver".to_string()
-        } else if n < 2 {
-            "Sandra".to_string()
-        } else {
-            "Carolyn".to_string()
+        match rng.gen_range(0,6) {
+            0 => Interests::Fishing,
+            1 => Interests::Food,
+            2 => Interests::Politics,
+            3 => Interests::Technology,
+            4 => Interests::Television,
+            _ => Interests::Videogames,
         }
+    }
+
+    fn rand_interest_vec() -> Vec<Interests> {
+        vec![Person::rand_interest(), Person::rand_interest()]
     }
 
     pub fn greeting(&self) -> () {
