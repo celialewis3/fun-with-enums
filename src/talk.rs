@@ -24,6 +24,20 @@ enum Topics {
     Television,
 }
 
+impl Topics {
+
+    fn rand_topic() -> Topics {
+        let mut rng = rand::thread_rng();
+
+        match rng.gen_range(0,3) {
+            0 => Topics::Food,
+            1 => Topics::Politics,
+            2 => Topics::Videogames,
+            _ => Topics::Television,
+        }
+    }
+}
+
 pub struct Room {
     people: Vec<Person>,
     //conversations: Vec<Conversation>,
@@ -64,13 +78,13 @@ impl Room {
             if let Some(next_person) = iter.next() {
                 let conversation = Conversation {
                     people: vec![person.clone(), next_person.clone()],
-                    topic: Topics::Television
+                    topic: Topics::rand_topic()
                 };
                 conversations.push(conversation);
             } else {
                 let conversation = Conversation {
                     people: vec![person.clone()],
-                    topic: Topics::Television
+                    topic: Topics::rand_topic()
                 };
                 conversations.push(conversation);
             }
@@ -82,13 +96,19 @@ impl Room {
     pub fn talk(&self) {
         let mut count: u32 = 0;
 
+        println!("There are {} people in the room.", self.people.len());
+        println!("");
+
         for convo in Room::spawn_conversations(&self) {
             println!("Conversation {}", count);
             count +=1;
 
             for person in convo.people {
-                println!("{}", person.name)
+                println!("{} who likes {:?}", person.name, person.interests)
             }
+
+            println!("The conversation topic is {:?}", convo.topic);
+            println!("");
 
 
         }
@@ -100,25 +120,6 @@ impl Room {
 pub struct Conversation {
     people: Vec<Person>,
     topic: Topics,
-}
-
-impl Conversation {
-
-    pub fn new() -> Self {
-        Self {
-            people: vec![Person::new(), Person::new()],
-            topic: Topics::Videogames,
-        }
-    }
-
-    pub fn talk(&self) {
-        // try doing this with if let .. instead
-        let mut iter = self.people.iter();
-        let p1 = iter.next().unwrap().name.clone();
-        let p2 = iter.next().unwrap().name.clone();
-        println!("{} and {} are talking about {:?}", p1, p2, self.topic)
-    }
-
 }
 
 impl Person {
@@ -134,14 +135,19 @@ impl Person {
     
     fn rand_name() -> String {
         let mut rng = rand::thread_rng();
-        let n: u64 = rng.gen_range(0, 3);
 
-        if n < 1 {
-            "Oliver".to_string()
-        } else if n < 2 {
-            "Carolyn".to_string()
-        } else {
-            "Luisa".to_string()
+        match rng.gen_range(0,10) {
+            0 => "Luisa".to_string(),
+            1 => "Janelle".to_string(),
+            2 => "Celia".to_string(),
+            3 => "Rebecca".to_string(),
+            4 => "Palak".to_string(),
+            5 => "Kelsey".to_string(),
+            6 => "Grace".to_string(),
+            7 => "Jasmine".to_string(),
+            8 => "Karl".to_string(),
+            9 => "Mina".to_string(),
+            _ => "Juan".to_string(),
         }
     }
 

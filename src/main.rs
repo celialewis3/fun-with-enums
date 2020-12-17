@@ -6,7 +6,7 @@ use rand::Rng;
 fn main() {
   //bar::simulate_bar(2);
 
-  let room = talk::Room::new(6);
+  let room = talk::Room::new(10);
 
   room.talk();
 
