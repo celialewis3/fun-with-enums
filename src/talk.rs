@@ -4,6 +4,7 @@ use rand::Rng;
 pub struct Person {
     name: String,
     interests: Vec<Interests>,
+    relationships: Vec<Relationship>
 }
 
 #[derive(Debug, Clone)]
@@ -16,14 +17,16 @@ enum Interests {
     Television,
 }
 
+#[derive(Debug, Clone)]
 enum RelationshipLevel {
     Stranger,
     Friendly,
     Besties
 }
 
+#[derive(Debug, Clone)]
 struct Relationship {
-    pair: Vec<Person>,
+    with: Person,
     level: RelationshipLevel
 }
 
@@ -56,7 +59,10 @@ pub struct Simulation {
 impl Simulation {
     pub fn step(&self) {
         // Increase relatonship levels of people in conversation with each other
-        // Have some people leave the room
+    }
+
+    pub fn randomize(&self) {
+        // Respawn conversations so diff people are talking to each other
     }
 }
 
@@ -153,6 +159,7 @@ impl Person {
         Self {
             name: Person::rand_name(),
             interests: Person::rand_interest_vec(),
+            relationships: Vec::new()
         }
 
     }

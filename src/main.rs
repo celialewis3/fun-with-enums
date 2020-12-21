@@ -1,5 +1,6 @@
 mod bar;
 mod talk;
+mod generics;
 
 use rand::Rng;
 
@@ -8,7 +9,11 @@ fn main() {
 
   let room = talk::Room::new(10);
 
-  room.talk();
+  //room.talk();
+
+  println!("{:?}", generics::perry());
+  println!("{:?}", generics::animal_computer());
+  generics::computer_data();
 
 
 }
